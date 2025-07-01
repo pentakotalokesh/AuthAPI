@@ -10,13 +10,16 @@ from rest_framework import status
 def register(request):
     username = request.data.get('username')
     password = request.data.get('password')
+    email = request.data.get('email')
+    first_name = request.data.get('first_name')
+    last_name = request.data.get("last_name")
     if username is None or password is None:
         return Response({'error': 'Username and password required'}, status=400)
     
     if User.objects.filter(username=username).exists():
         return Response({'error': 'Username already exists'}, status=400)
     
-    user = User.objects.create_user(username=username, password=password)
+    user = User.objects.create_user(username=username, password=password,email=email,first_name=first_name,last_name=last_name)
     token = Token.objects.create(user=user)
     return Response({'token': token.key}, status=201)
 
